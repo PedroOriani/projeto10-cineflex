@@ -12,7 +12,7 @@ export default function SeatsPage() {
     const [day, setDay] = useState([]);
     const [available, setAvailable] = useState(['1']);
     const [unavailable, setUnavailable] = useState(['3']);
-    const [selected, setSelected] = useState([]);
+    const [selected, setSelected] = useState(['27']);
 
     const params = useParams();
 
@@ -21,38 +21,38 @@ export default function SeatsPage() {
 
         const promise = axios.get(URL);
         promise.then((resposta) => {
-            setInfos(resposta.data);
-            setSeats(resposta.data.seats);
-            setMovie(resposta.data.movie);
-            setDay(resposta.data.day);
+            const preInfo = resposta.data
+            setInfos(preInfo);
+            const preSeats = resposta.data.seats
+            setSeats(preSeats);
+            const preMovie = resposta.data.movie
+            setMovie(preMovie);
+            const preDay = resposta.data.day
+            setDay(preDay);
+            verify(preSeats);
     })
         promise.catch(erro => console.log(erro.response.data))
     }, [])
 
-    function verifySeats(){
+    function verify(seat) {
+        console.log(seat[1].isAvailable)
         for (let i = 0; i < seats.length; i++){
-            let number = seats[i].name
-            console.log(number)
-            if(seats[i].isAvailable === true){
-                const newAvailable = [...available, number]
-                setAvailable(newAvailable);
-            }else{
-                const newUnavailable = [...unavailable, number]
+            if(seats[i].isAvailable){
+                const newUnavailable = [...unavailable, i+1]
                 setUnavailable(newUnavailable);
             }
         } 
     }
 
-    console.log(available);
-    console.log(unavailable);
-
     function select(i) {
         if(unavailable.includes(i)){
             return alert('Esse assento não está disponível')
+        } else {
+
         }
         const newSelected = [...selected, i]
         setSelected(newSelected);
-        console.log(selected)
+        console.log(newSelected)
     }
 
     return (
@@ -183,22 +183,24 @@ const CaptionItem = styled.div`
 const SeatItem = styled.div`
     border: 1px solid ${(props => {
         if(props.selected){
-            return '#0E7D71'
+            return '#0E7D71';
         }else if(props.available){
-            return '#808F9D'
+            return '#808F9D';
         }else if(props.unavailable){
-            return '#F7C52B'
+            return '#F7C52B';
         }
-    })}
+    })};
+
     background-color: ${(props => {
         if(props.selected){
-            return '#1AAE9E'
+            return '#1AAE9E';
         }else if(props.available){
-            return '#C3CFD9'
+            return '#C3CFD9';
         }else if(props.unavailable){
-            return '#FBE192'
+            return '#FBE192';
         }
-    })}
+    })};
+
     height: 25px;
     width: 25px;
     border-radius: 25px;
