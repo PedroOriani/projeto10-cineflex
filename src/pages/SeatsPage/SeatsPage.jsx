@@ -11,7 +11,7 @@ export default function SeatsPage() {
     const [movie, setMovie] = useState([]);
     const [day, setDay] = useState([]);
     const [available, setAvailable] = useState(['1']);
-    const [unavailable, setUnavailable] = useState([]);
+    const [unavailable, setUnavailable] = useState(['3']);
     const [selected, setSelected] = useState([]);
 
     const params = useParams();
@@ -47,9 +47,12 @@ export default function SeatsPage() {
     console.log(unavailable);
 
     function select(i) {
+        if(unavailable.includes(i)){
+            return alert('Esse assento não está disponível')
+        }
         const newSelected = [...selected, i]
         setSelected(newSelected);
-        console.log(selected.includes(i))
+        console.log(selected)
     }
 
     return (
