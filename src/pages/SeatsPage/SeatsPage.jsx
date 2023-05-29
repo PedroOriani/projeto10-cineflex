@@ -83,20 +83,38 @@ export default function SeatsPage() {
         }
         const slice1 = selected.slice(0, index)
         const slice2 = selected.slice(index+1)
-        const slices = [];
+        const slicesName = [];
 
         for (let j = 0; j < slice1.length; j++){
-            slices.push(slice1[j])
+            slicesName.push(slice1[j])
         }
         for (let j = 0; j < slice2.length; j++){
-            slices.push(slice2[j])
+            slicesName.push(slice2[j])
+        }        
+        setSelected(slicesName);
+
+        const slice3 = selectedId.slice(0, index)
+        const slice4 = selectedId.slice(index+1)
+        const slicesId = [];
+
+        for (let j = 0; j < slice3.length; j++){
+            slicesId.push(slice3[j])
         }
-        
-        setSelected(slices);
+        for (let j = 0; j < slice4.length; j++){
+            slicesId.push(slice4[j])
+        }
+        setSelectedId(slicesId);
+    }
+
+    const newPost ={
+        ids: {selectedId},
+	    name: {buyerName},
+	    cpf: {CPF}
     }
 
     function submit(event) {
         event.preventDefault();
+        console.log(newPost);
 
         if(selected.length > 0 && buyerName.length > 2 && CPF.length === 11){
             navigate('/sucesso')
