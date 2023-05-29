@@ -15,7 +15,6 @@ export default function HomePage() {
         const promise = axios.get(URL);
 
         promise.then((resposta) => {
-            console.log(resposta.data)
             setImages(resposta.data)
         })
     }, [])

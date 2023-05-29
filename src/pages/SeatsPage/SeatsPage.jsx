@@ -107,17 +107,25 @@ export default function SeatsPage() {
     }
 
     const newPost ={
-        ids: {selectedId},
-	    name: {buyerName},
-	    cpf: {CPF}
+        ids: selectedId,
+	    name: buyerName,
+	    cpf: CPF
     }
 
     function submit(event) {
         event.preventDefault();
-        console.log(newPost);
+        console.log(newPost)
 
         if(selected.length > 0 && buyerName.length > 2 && CPF.length === 11){
-            navigate('/sucesso')
+            const URL = 'https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many';
+            const promise = axios.post(URL, newPost);
+            promise.then(() => {
+                navigate('/sucesso')
+            })
+            promise.catch(() => {
+                alert('erro no post')
+            })
+            
         }else if (selected.length === 0){
             alert('Selecione pelo menos um assento')
         }else if (buyerName.length <3){

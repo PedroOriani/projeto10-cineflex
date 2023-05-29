@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios";
 import { useState } from "react";
@@ -16,12 +16,9 @@ export default function SessionsPage() {
         const promise = axios.get(URL);
         promise.then((resposta) => {
             setSessions(resposta.data);
-            console.log(resposta.data);
     })
         promise.catch(erro => console.log(erro.response.data))
     }, [])
-
-    const navigate = useNavigate();
 
     return (
         <PageContainer>

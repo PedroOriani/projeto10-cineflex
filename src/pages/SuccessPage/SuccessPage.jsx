@@ -8,9 +8,9 @@ export default function SuccessPage() {
 
     const navigate = useNavigate();
 
-    // function return() {
-    //     navigate('/');
-    // }
+    function returnHome() {
+        navigate('/');
+    }
 
     return (
         <PageContainer>
@@ -35,7 +35,7 @@ export default function SuccessPage() {
                 <p>CPF: 123.456.789-10</p>
             </TextContainer>
 
-            <button>Voltar para Home</button>
+            <button onClick={returnHome}>Voltar para Home</button>
         </PageContainer>
     )
 }
