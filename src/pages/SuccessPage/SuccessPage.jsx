@@ -1,10 +1,14 @@
 import { useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom"
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios";
 import { useState } from "react";
 
 export default function SuccessPage() {
+
+    const {CPF, buyerName, selecionados, seats, infos} = useLocation().state;
+
+    console.log(selecionados)
 
     const navigate = useNavigate();
 
@@ -12,30 +16,42 @@ export default function SuccessPage() {
         navigate('/');
     }
 
+    let finalCPF = '';
+
+    for (let i = 1; i < CPF.length+1; i++){
+        if (i % 3 === 0 && i !== 9){
+            finalCPF += CPF[i-1] + '.'
+        }else if (i === 9){
+            finalCPF += CPF[i-1] + '-'
+        }else{
+            finalCPF += CPF[i-1];
+        }
+    }
+
     return (
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
+                <p>{infos.movie.title}</p>
+                <p>{infos.day.date} - {infos.name}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
+                {selecionados.map((seat, i) => 
+                    <p>Assento {seat}</p>)
+                }
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
+                <p>Nome: {buyerName}</p>
+                <p>CPF: {finalCPF}</p>
             </TextContainer>
 
-            <button onClick={returnHome}>Voltar para Home</button>
+            <button onClick={returnHome} data-test="go-home-btn">Voltar para Home</button>
         </PageContainer>
     )
 }

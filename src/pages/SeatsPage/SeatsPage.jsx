@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom"
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios";
 import { useState } from "react";
@@ -24,8 +24,6 @@ export default function SeatsPage() {
     let newAvailable;
 
     const [teste, setTeste] = useState([]);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params.idassento}/seats`;
@@ -112,6 +110,11 @@ export default function SeatsPage() {
 	    cpf: CPF
     }
 
+    const navigate = useNavigate();
+    const selecionados = selected;
+    console.log('selecionados')
+    console.log(selecionados)
+
     function submit(event) {
         event.preventDefault();
         console.log(newPost)
@@ -120,8 +123,8 @@ export default function SeatsPage() {
             const URL = 'https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many';
             const promise = axios.post(URL, newPost);
             promise.then(() => {
-                navigate('/sucesso')
-            })
+                navigate('/sucesso', { state: {CPF, buyerName, selecionados, seats, movie, day, infos} });
+            });
             promise.catch(() => {
                 alert('erro no post')
             })
