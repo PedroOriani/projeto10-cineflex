@@ -43,7 +43,6 @@ export default function SeatsPage() {
     }, [])
 
     function verify(seat) {
-        console.log(seat[0].isAvailable === false)
         for (let i = 0; i < seat.length; i++){
             if(seat[i].isAvailable === false){
                 newUnavailable = unavailable;
@@ -73,20 +72,24 @@ export default function SeatsPage() {
     }
 
     function unselect(i){
-        console.log(i)
-        let string = selected.join('')
-        console.log('string:')
-        console.log(string)
-        let newStr = string.replace(i, '');
-        console.log('newStr:')
-        console.log(newStr)
-        let strArr = newStr.split('')
-        console.log('strArr:')
-        console.log(strArr)
-        for (let i = 0; i < strArr.length; i++){
-            strArr[i] = parseInt(strArr[i])
+        let index;
+        for (let j = 0; j < selected.length; j++){
+            if (selected[j] === i){
+                index = j;
+            }
         }
-        setSelected(strArr) 
+        const slice1 = selected.slice(0, index)
+        const slice2 = selected.slice(index+1)
+        const slices = [];
+
+        for (let j = 0; j < slice1.length; j++){
+            slices.push(slice1[j])
+        }
+        for (let j = 0; j < slice2.length; j++){
+            slices.push(slice2[j])
+        }
+        
+        setSelected(slices);
     }
 
     // function submit(event) {
