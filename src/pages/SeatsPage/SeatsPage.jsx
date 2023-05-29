@@ -13,6 +13,7 @@ export default function SeatsPage() {
     const [available, setAvailable] = useState([]);
     const [unavailable, setUnavailable] = useState([]);
     const [selected, setSelected] = useState([]);
+    const [selectedId, setSelectedId] = useState([]);
 
     const [buyerName, setBuyerName] = useState('')
     const [CPF, setCPF] = useState('')
@@ -23,6 +24,8 @@ export default function SeatsPage() {
     let newAvailable;
 
     const [teste, setTeste] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params.idassento}/seats`;
@@ -65,9 +68,9 @@ export default function SeatsPage() {
             const newSelected = [...selected, i]
             setSelected(newSelected);
             console.log(newSelected);
-            const newTeste = [...teste, i]
-            setTeste(newTeste);
-            console.log(newTeste)
+            const newSelectedID = [...selectedId, seats[i-1].id];
+            setSelectedId(newSelectedID)
+            console.log(newSelectedID)
         }
     }
 
@@ -92,9 +95,19 @@ export default function SeatsPage() {
         setSelected(slices);
     }
 
-    // function submit(event) {
-    //     event.preventDefault();
-    // }
+    function submit(event) {
+        event.preventDefault();
+
+        if(selected.length > 0 && buyerName.length > 2 && CPF.length === 11){
+            navigate('/sucesso')
+        }else if (selected.length === 0){
+            alert('Selecione pelo menos um assento')
+        }else if (buyerName.length <3){
+            alert('Digite um nome válido')
+        }else if (CPF.length !== 11){
+            alert('Digite um CPF válido')
+        }
+    }
 
     return (
         <PageContainer>
@@ -138,7 +151,7 @@ export default function SeatsPage() {
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer>
+            <FormContainer onSubmit={submit}>
                 <label>
                 Nome do Comprador:
                 <input 
@@ -147,19 +160,20 @@ export default function SeatsPage() {
                 placeholder="Digite seu nome..." 
                 value={buyerName}
                 onChange={(e) => setBuyerName(e.target.value)}
+                required
                 />
                 </label>
-
                 CPF do Comprador:
                 <input 
-                type='text'
+                type='number'
                 data-test="client-cpf" 
                 placeholder="Digite seu CPF..."
                 value={CPF}
                 onChange={(e) => setCPF(e.target.value)}
+                required
                 />
 
-                <button data-test="book-seat-btn">Reservar Assento(s)</button>
+                <button type="submit" data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer data-test="footer">

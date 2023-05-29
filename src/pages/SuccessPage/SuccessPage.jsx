@@ -1,8 +1,16 @@
+import { useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import axios from "axios";
+import { useState } from "react";
 
 export default function SuccessPage() {
 
-    
+    const navigate = useNavigate();
+
+    // function return() {
+    //     navigate('/');
+    // }
 
     return (
         <PageContainer>
