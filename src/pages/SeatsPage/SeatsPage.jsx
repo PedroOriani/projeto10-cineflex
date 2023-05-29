@@ -10,11 +10,19 @@ export default function SeatsPage() {
     const [seats, setSeats] = useState([]);
     const [movie, setMovie] = useState([]);
     const [day, setDay] = useState([]);
-    const [available, setAvailable] = useState(['1']);
-    const [unavailable, setUnavailable] = useState(['3']);
-    const [selected, setSelected] = useState(['27']);
+    const [available, setAvailable] = useState([]);
+    const [unavailable, setUnavailable] = useState([]);
+    const [selected, setSelected] = useState([]);
+
+    const [buyerName, setBuyerName] = useState('')
+    const [CPF, setCPF] = useState('')
 
     const params = useParams();
+
+    let newUnavailable;
+    let newAvailable;
+
+    const [teste, setTeste] = useState([]);
 
     useEffect(() => {
         const URL = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params.idassento}/seats`;
@@ -35,11 +43,16 @@ export default function SeatsPage() {
     }, [])
 
     function verify(seat) {
-        console.log(seat[1].isAvailable)
-        for (let i = 0; i < seats.length; i++){
-            if(seats[i].isAvailable){
-                const newUnavailable = [...unavailable, i+1]
+        console.log(seat[0].isAvailable === false)
+        for (let i = 0; i < seat.length; i++){
+            if(seat[i].isAvailable === false){
+                newUnavailable = unavailable;
+                newUnavailable.push(seat[i].name)
                 setUnavailable(newUnavailable);
+            } else {
+                newAvailable = available;
+                newAvailable.push(seat[i].name)
+                setAvailable(newAvailable);
             }
         } 
     }
@@ -47,13 +60,38 @@ export default function SeatsPage() {
     function select(i) {
         if(unavailable.includes(i)){
             return alert('Esse assento não está disponível')
-        } else {
-
+        } else if (selected.includes(i)){
+            return unselect(i);
+        }else{
+            const newSelected = [...selected, i]
+            setSelected(newSelected);
+            console.log(newSelected);
+            const newTeste = [...teste, i]
+            setTeste(newTeste);
+            console.log(newTeste)
         }
-        const newSelected = [...selected, i]
-        setSelected(newSelected);
-        console.log(newSelected)
     }
+
+    function unselect(i){
+        console.log(i)
+        let string = selected.join('')
+        console.log('string:')
+        console.log(string)
+        let newStr = string.replace(i, '');
+        console.log('newStr:')
+        console.log(newStr)
+        let strArr = newStr.split('')
+        console.log('strArr:')
+        console.log(strArr)
+        for (let i = 0; i < strArr.length; i++){
+            strArr[i] = parseInt(strArr[i])
+        }
+        setSelected(strArr) 
+    }
+
+    // function submit(event) {
+    //     event.preventDefault();
+    // }
 
     return (
         <PageContainer>
@@ -98,11 +136,25 @@ export default function SeatsPage() {
             </CaptionContainer>
 
             <FormContainer>
+                <label>
                 Nome do Comprador:
-                <input data-test="client-name" placeholder="Digite seu nome..." />
+                <input 
+                type='text'
+                data-test="client-name" 
+                placeholder="Digite seu nome..." 
+                value={buyerName}
+                onChange={(e) => setBuyerName(e.target.value)}
+                />
+                </label>
 
                 CPF do Comprador:
-                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
+                <input 
+                type='text'
+                data-test="client-cpf" 
+                placeholder="Digite seu CPF..."
+                value={CPF}
+                onChange={(e) => setCPF(e.target.value)}
+                />
 
                 <button data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
@@ -142,7 +194,7 @@ const SeatsContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
 `
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;
